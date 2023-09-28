@@ -8,8 +8,9 @@ import {
 import { Match } from './decorators/Match.decorator';
 import { IsUsernameUnique } from './decorators/IsUsernameUnique.decorator';
 import { UserInterface } from './User.interface';
+import { BaseUserDTO } from './baseUser.dto';
 
-export class UserDTO implements UserInterface {
+export class UserDTO extends BaseUserDTO implements UserInterface {
   @IsString()
   @IsNotEmpty()
   @MinLength(4)
@@ -18,12 +19,6 @@ export class UserDTO implements UserInterface {
     message: 'Username $value already exists. Choose another name.',
   })
   username: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(20)
-  password: string;
 
   @IsString()
   @IsNotEmpty()
