@@ -23,6 +23,7 @@ export class IsUsernameUniqueConstraint
   implements ValidatorConstraintInterface
 {
   constructor(private readonly usersService: UsersService) {}
+
   async validate(username: string): Promise<boolean> {
     return this.usersService
       .findByUsername(username)

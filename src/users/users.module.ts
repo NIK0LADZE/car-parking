@@ -16,7 +16,6 @@ import { UsersService } from './users.service';
     ConfigModule.forRoot(),
     SequelizeModule.forFeature([User]),
     PassportModule,
-    UsersModule,
     JwtModule.register({
       secret: process.env.JWT_KEY,
       signOptions: { expiresIn: process.env.TOKEN_EXPIRATION },

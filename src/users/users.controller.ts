@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { ForgotPasswordDTO } from './forgotPassword/forgotPassword.dto';
 import { UserDTO } from './user.dto';
@@ -20,10 +27,8 @@ export class UsersController {
     return this.usersService.signIn(req.user);
   }
 
-  @Post('forgot-password')
+  @Patch('forgot-password')
   setNewPassword(@Body() user: ForgotPasswordDTO) {
-    console.log(user);
-
     return this.usersService.setNewPassword(user);
   }
 }

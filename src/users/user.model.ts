@@ -1,4 +1,12 @@
-import { AllowNull, Column, Model, Table, Unique } from 'sequelize-typescript';
+import {
+  AllowNull,
+  Column,
+  HasMany,
+  Model,
+  Table,
+  Unique,
+} from 'sequelize-typescript';
+import { Car } from 'src/cars/car.model';
 import { UserInterface } from './User.interface';
 
 @Table
@@ -19,4 +27,7 @@ export class User extends Model implements UserInterface {
   @AllowNull(false)
   @Column
   role: string;
+
+  @HasMany(() => Car)
+  car: Car[];
 }

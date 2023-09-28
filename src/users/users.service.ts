@@ -7,7 +7,7 @@ import { UserDTO } from './user.dto';
 import { User } from './user.model';
 
 export interface FoundUser {
-  userId: number;
+  userID: number;
   username: string;
 }
 
@@ -51,18 +51,18 @@ export class UsersService {
     const user = await this.findByUsername(username);
 
     if (user) {
-      const { id: userId, username, password: hashedPassword } = user;
+      const { id: userID, username, password: hashedPassword } = user;
       const didMatch = comparePasswords(password, hashedPassword);
 
       if (didMatch) {
-        return { userId, username };
+        return { userID, username };
       }
     }
   }
 
   signIn(user: FoundUser) {
-    const { userId, username } = user;
-    const payload: JwtPayload = { username, sub: userId };
+    const { userID, username } = user;
+    const payload: JwtPayload = { username, sub: userID };
 
     return {
       username,
