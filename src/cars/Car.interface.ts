@@ -1,5 +1,5 @@
 export interface CarInterface {
-  title: string;
+  title?: string;
   stateID: string;
-  type: string;
+  type?: string;
 }
