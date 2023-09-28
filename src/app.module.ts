@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { AuthModule } from './auth/auth.module';
 import { User } from './users/user.model';
 import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     UsersModule,
+    AuthModule,
+    // This doesn't work for some reason, env variables are missing in other modules,
+    // unless I import ConfigModule in those modules as well
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRoot({
       dialect: 'mysql',

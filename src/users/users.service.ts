@@ -24,8 +24,6 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    console.log(username);
-
     return await this.userModel.findOne({
       where: {
         username,
