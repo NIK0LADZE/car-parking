@@ -1,4 +1,4 @@
-import { BaseCarDTO } from './baseCar.dto';
+import { BaseCarDTO } from './BaseCar.dto';
 import { CarInterface } from './Car.interface';
 import { IsStateIDUnique } from './decorators/IsStateIDUnique.decorator';
 

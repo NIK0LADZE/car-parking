@@ -1,8 +1,8 @@
 import { IsOptional } from 'class-validator';
-import { BaseCarDTO } from './baseCar.dto';
+import { BaseCarDTO } from './BaseCar.dto';
 import { CarInterface } from './Car.interface';
 
-export class UpdateCarDTO extends BaseCarDTO implements CarInterface {
+export class UpdateOrDeleteCarDTO extends BaseCarDTO implements CarInterface {
   @IsOptional()
   title: string;
 
