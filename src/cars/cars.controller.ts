@@ -37,7 +37,7 @@ export class CarsController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.User)
-  async getAllZones(@Request() { user: { userID } }) {
+  async getAllCars(@Request() { user: { userID } }) {
     return await this.carsService.getAll(userID);
   }
 

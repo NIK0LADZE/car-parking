@@ -24,7 +24,7 @@ export class CarsService {
   }
 
   async update(
-    { title, type }: CarDTO,
+    { title, stateID, type }: CarDTO,
     id: number,
     userID: number,
   ): Promise<object | null> {
@@ -38,6 +38,7 @@ export class CarsService {
 
     car.update({
       title,
+      stateID,
       type,
     });
 

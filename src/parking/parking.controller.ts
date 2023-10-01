@@ -51,7 +51,7 @@ export class ParkingController {
     return await this.parkingService.start(userID, parking);
   }
 
-  @Post('stop/:id')
+  @Post('stop/:orderID')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.User)
   @UsePipes(
@@ -59,7 +59,7 @@ export class ParkingController {
       groups: [ParkingZoneValidationGroups.CREATE],
     }),
   )
-  async takeTheCar(@Param() { id }: any, @Request() { user: { userID } }) {
-    return await this.parkingService.stop(id, userID);
+  async takeTheCar(@Param() { orderID }: any, @Request() { user: { userID } }) {
+    return await this.parkingService.stop(orderID, userID);
   }
 }

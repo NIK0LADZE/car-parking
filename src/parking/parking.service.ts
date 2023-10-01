@@ -38,6 +38,17 @@ export class ParkingService {
       throw new BadRequestException("This car doesn't belong to you");
     }
 
+    const isAlreadyParked = await this.parkingModel.findOne({
+      where: {
+        carID,
+        userID,
+      },
+    });
+
+    if (isAlreadyParked) {
+      throw new BadRequestException('This car is already on the parking');
+    }
+
     const { id } = await this.parkingModel.create({
       userID,
       carID,
