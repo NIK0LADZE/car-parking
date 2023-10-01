@@ -21,6 +21,7 @@ export class CarDTO implements CarInterface {
   })
   title: string;
 
+  @IsOptional({ groups: [CarValidationGroups.UPDATE] })
   @IsDefined({ always: true })
   @IsString({ always: true })
   @IsNotEmpty({ always: true })

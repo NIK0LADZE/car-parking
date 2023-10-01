@@ -22,12 +22,10 @@ export class ParkingZonesService {
     return { message: 'Parking zone was added successfully!' };
   }
 
-  async update({
-    id,
-    title,
-    address,
-    price,
-  }: ParkingZoneDTO): Promise<object | null> {
+  async update(
+    id: number,
+    { title, address, price }: ParkingZoneDTO,
+  ): Promise<object | null> {
     const car = await this.findByID(id);
 
     if (!car) {
@@ -43,7 +41,7 @@ export class ParkingZonesService {
     return { message: 'Parking zone was updated successfully!' };
   }
 
-  async delete({ id }: ParkingZoneDTO): Promise<object | null> {
+  async delete(id: number): Promise<object | null> {
     const wasDeleted = await this.parkingZoneModel.destroy({
       where: {
         id,
@@ -65,6 +63,7 @@ export class ParkingZonesService {
 
   async findByID(id: number): Promise<ParkingZone | null> {
     return await this.parkingZoneModel.findOne({
+      attributes: ['id', 'title', 'address', 'price'],
       where: {
         id,
       },

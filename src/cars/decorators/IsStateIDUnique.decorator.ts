@@ -22,7 +22,7 @@ export const IsStateIDUnique = (validationOptions?: ValidationOptions) => {
 export class IsStateIDUniqueConstraint implements ValidatorConstraintInterface {
   constructor(private readonly carsService: CarsService) {}
 
-  async validate(stateID: string): Promise<boolean> {
+  async validate(stateID: string = ''): Promise<boolean> {
     return this.carsService
       .findByStateID(stateID)
       .then((foundCar) => !foundCar);

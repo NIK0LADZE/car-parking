@@ -24,12 +24,13 @@ export class CarsService {
   }
 
   async update(
-    { title, stateID, type }: CarDTO,
+    { title, type }: CarDTO,
+    id: number,
     userID: number,
   ): Promise<object | null> {
-    const car = await this.findByStateID(stateID, userID);
+    const car = await this.findByID(id, userID);
 
-    if (!car) {
+    if (!car || car.message) {
       throw new BadRequestException(
         "This car doesn't exist or you don't have access to it",
       );
@@ -43,10 +44,10 @@ export class CarsService {
     return { message: 'Car was updated successfully!' };
   }
 
-  async delete({ stateID }: CarDTO, userID: number): Promise<object | null> {
+  async delete(id: number, userID: number): Promise<object | null> {
     const wasDeleted = await this.carModel.destroy({
       where: {
-        stateID,
+        id,
         userID,
       },
     });
@@ -58,6 +59,31 @@ export class CarsService {
     }
 
     return { message: 'Car was deleted successfully!' };
+  }
+
+  async getAll(userID: number): Promise<Car[]> {
+    return await this.carModel.findAll({
+      attributes: ['id', 'title', 'stateID'],
+      where: {
+        userID,
+      },
+    });
+  }
+
+  async findByID(id: number, userID: number): Promise<Car | any> {
+    const car = await this.carModel.findOne({
+      attributes: ['id', 'title', 'stateID'],
+      where: {
+        id,
+        userID,
+      },
+    });
+
+    if (!car) {
+      return { message: 'No Car found' };
+    }
+
+    return car;
   }
 
   async findByStateID(stateID: string, userID?: number): Promise<Car | null> {

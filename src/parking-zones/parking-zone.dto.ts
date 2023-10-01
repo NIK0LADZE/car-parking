@@ -1,10 +1,4 @@
-import {
-  IsDefined,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { IsUniqueTitle } from './decorators/IsUniqueTitle.decorator';
 import { ParkingZoneInterface } from './parking-zone.interface';
 
@@ -15,23 +9,6 @@ export enum ParkingZoneValidationGroups {
 }
 
 export class ParkingZoneDTO implements ParkingZoneInterface {
-  @IsDefined({
-    groups: [
-      ParkingZoneValidationGroups.UPDATE,
-      ParkingZoneValidationGroups.DELETE,
-    ],
-  })
-  @IsNumber(
-    { allowNaN: false, maxDecimalPlaces: 0 },
-    {
-      groups: [
-        ParkingZoneValidationGroups.UPDATE,
-        ParkingZoneValidationGroups.DELETE,
-      ],
-    },
-  )
-  id: number;
-
   @IsOptional({ groups: [ParkingZoneValidationGroups.UPDATE] })
   @IsString({
     groups: [

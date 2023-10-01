@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -35,14 +36,21 @@ export class ParkingZonesController {
     return await this.parkingZoneService.create(parkingZone);
   }
 
-  @Get('all')
+  @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
   async getAllZones() {
     return await this.parkingZoneService.getAll();
   }
 
-  @Patch()
+  @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  async findOne(@Param() { id }: any) {
+    return await this.parkingZoneService.findByID(id);
+  }
+
+  @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @UsePipes(
@@ -50,11 +58,14 @@ export class ParkingZonesController {
       groups: [ParkingZoneValidationGroups.UPDATE],
     }),
   )
-  async updateParkingZone(@Body() parkingZone: ParkingZoneDTO) {
-    return await this.parkingZoneService.update(parkingZone);
+  async updateParkingZone(
+    @Param() { id }: any,
+    @Body() parkingZone: ParkingZoneDTO,
+  ) {
+    return await this.parkingZoneService.update(id, parkingZone);
   }
 
-  @Delete()
+  @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @UsePipes(
@@ -62,7 +73,7 @@ export class ParkingZonesController {
       groups: [ParkingZoneValidationGroups.DELETE],
     }),
   )
-  async deleteParkingZone(@Body() parkingZone: ParkingZoneDTO) {
-    return await this.parkingZoneService.delete(parkingZone);
+  async deleteParkingZone(@Param() { id }: any) {
+    return await this.parkingZoneService.delete(id);
   }
 }
