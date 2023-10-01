@@ -1,14 +1,15 @@
 import {
   AllowNull,
-  BelongsTo,
   Column,
   ForeignKey,
+  HasMany,
   Model,
   Table,
   Unique,
 } from 'sequelize-typescript';
+import { Parking } from 'src/parking/parking.model';
 import { User } from 'src/users/user.model';
-import { CarInterface } from './Car.interface';
+import { CarInterface } from './car.interface';
 
 @Table
 export class Car extends Model implements CarInterface {
@@ -30,6 +31,6 @@ export class Car extends Model implements CarInterface {
   @Column
   userID: number;
 
-  @BelongsTo(() => User)
-  user: User;
+  @HasMany(() => Parking)
+  parking: Parking;
 }

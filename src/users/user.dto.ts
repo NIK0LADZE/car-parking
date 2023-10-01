@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Match } from './decorators/Match.decorator';
 import { IsUniqueUsername } from './decorators/IsUniqueUsername.decorator';
-import { UserInterface } from './User.interface';
+import { UserInterface } from './user.interface';
 
 export enum UserValidationGroups {
   AUTH = 'AUTH',

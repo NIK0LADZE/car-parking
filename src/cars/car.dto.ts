@@ -1,5 +1,5 @@
 import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { CarInterface } from './Car.interface';
+import { CarInterface } from './car.interface';
 import { IsStateIDUnique } from './decorators/IsStateIDUnique.decorator';
 
 export enum CarValidationGroups {

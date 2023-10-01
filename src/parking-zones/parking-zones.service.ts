@@ -1,5 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Car } from 'src/cars/car.model';
+import { Parking } from 'src/parking/parking.model';
+import { User } from 'src/users/user.model';
 import { ParkingZoneDTO } from './parking-zone.dto';
 import { ParkingZone } from './parking-zone.model';
 
@@ -8,6 +11,8 @@ export class ParkingZonesService {
   constructor(
     @InjectModel(ParkingZone)
     private parkingZoneModel: typeof ParkingZone,
+    @InjectModel(Parking)
+    private parkingModel: typeof Parking,
   ) {}
 
   async create(car: ParkingZoneDTO): Promise<object | null> {
@@ -59,6 +64,39 @@ export class ParkingZonesService {
     return await this.parkingZoneModel.findAll({
       attributes: ['id', 'title', 'address', 'price'],
     });
+  }
+
+  async getParkingZoneRecords(
+    parkingZoneID: number,
+    { status }: ParkingZoneDTO,
+  ): Promise<Parking | any> {
+    const parking = await this.parkingModel.findAll({
+      attributes: ['id', 'status', 'startingTime', 'endingTime', 'totalAmount'],
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'username', 'balance', 'role'],
+        },
+        {
+          model: Car,
+          attributes: ['id', 'title', 'stateID', 'type'],
+        },
+        {
+          model: ParkingZone,
+          attributes: ['id', 'title', 'address', 'price'],
+        },
+      ],
+      where: {
+        parkingZoneID,
+        ...(status ? { status } : {}),
+      },
+    });
+
+    if (parking.length === 0) {
+      return { message: 'No parking found' };
+    }
+
+    return parking;
   }
 
   async findByID(id: number): Promise<ParkingZone | null> {

@@ -1,13 +1,16 @@
+import { DataTypes } from 'sequelize';
 import {
   AllowNull,
   Column,
+  Min,
   HasMany,
   Model,
   Table,
   Unique,
 } from 'sequelize-typescript';
 import { Car } from 'src/cars/car.model';
-import { UserInterface } from './User.interface';
+import { Parking } from 'src/parking/parking.model';
+import { UserInterface } from './user.interface';
 
 @Table
 export class User extends Model implements UserInterface {
@@ -21,12 +24,18 @@ export class User extends Model implements UserInterface {
   password: string;
 
   @AllowNull(true)
-  @Column
+  @Min(0)
+  @Column({
+    type: DataTypes.FLOAT,
+  })
   balance: number;
 
   @AllowNull(false)
   @Column
   role: string;
+
+  @HasMany(() => Parking)
+  parking: Parking[];
 
   @HasMany(() => Car)
   car: Car[];

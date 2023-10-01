@@ -6,6 +6,7 @@ export enum ParkingZoneValidationGroups {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
+  READ = 'READ',
 }
 
 export class ParkingZoneDTO implements ParkingZoneInterface {
@@ -62,4 +63,13 @@ export class ParkingZoneDTO implements ParkingZoneInterface {
     ],
   })
   price: number;
+
+  @IsOptional({ groups: [ParkingZoneValidationGroups.READ] })
+  @IsString({
+    groups: [ParkingZoneValidationGroups.READ],
+  })
+  @IsNotEmpty({
+    groups: [ParkingZoneValidationGroups.READ],
+  })
+  status: 'active' | 'expired' | 'rejected';
 }

@@ -46,8 +46,13 @@ export class ParkingZonesController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  async findOne(@Param() { id }: any) {
-    return await this.parkingZoneService.findByID(id);
+  @UsePipes(
+    new ValidationPipeWithGlobalOptions({
+      groups: [ParkingZoneValidationGroups.READ],
+    }),
+  )
+  async findOne(@Param() { id }: any, @Body() parking: ParkingZoneDTO) {
+    return await this.parkingZoneService.getParkingZoneRecords(id, parking);
   }
 
   @Patch(':id')
