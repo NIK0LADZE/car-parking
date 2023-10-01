@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { bcryptPassword, comparePasswords } from '../utils/bcrypt';
-import { ForgotPasswordDTO } from './forgotPassword/forgotPassword.dto';
 import { UserDTO } from './user.dto';
 import { User } from './user.model';
 
@@ -71,18 +70,17 @@ export class UsersService {
     };
   }
 
-  async setNewPassword(
-    incomingUserData: ForgotPasswordDTO,
-  ): Promise<object | null> {
+  async setNewPassword(incomingUserData: UserDTO): Promise<object | null> {
     const { username, password } = incomingUserData;
     const user = await this.findByUsername(username);
-    const { password: previousPassword } = user;
-    const hashedPassword = bcryptPassword(password);
-    const didMatch = comparePasswords(password, previousPassword);
 
     if (!user) {
       throw new BadRequestException('Username is incorrect');
     }
+
+    const { password: previousPassword } = user;
+    const hashedPassword = bcryptPassword(password);
+    const didMatch = comparePasswords(password, previousPassword);
 
     if (didMatch) {
       throw new BadRequestException(

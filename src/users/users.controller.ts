@@ -5,10 +5,11 @@ import {
   Post,
   Request,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
+import { ValidationPipeWithGlobalOptions } from 'src/pipes/validation-with-global-options.pipe';
 import { LocalAuthGuard } from './auth/local-auth.guard';
-import { ForgotPasswordDTO } from './forgotPassword/forgotPassword.dto';
-import { UserDTO } from './user.dto';
+import { UserDTO, UserValidationGroups } from './user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -16,7 +17,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('register')
-  addUser(@Body() user: UserDTO) {
+  @UsePipes(
+    new ValidationPipeWithGlobalOptions({
+      groups: [UserValidationGroups.REGISTER],
+    }),
+  )
+  async addUser(@Body() user: UserDTO) {
     this.usersService.create(user);
     return { message: 'Registration was successful!' };
   }
@@ -28,7 +34,12 @@ export class UsersController {
   }
 
   @Patch('forgot-password')
-  setNewPassword(@Body() user: ForgotPasswordDTO) {
+  @UsePipes(
+    new ValidationPipeWithGlobalOptions({
+      groups: [UserValidationGroups.FORGOT_PASSWORD],
+    }),
+  )
+  async setNewPassword(@Body() user: UserDTO) {
     return this.usersService.setNewPassword(user);
   }
 }
