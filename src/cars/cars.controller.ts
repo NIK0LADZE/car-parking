@@ -6,12 +6,12 @@ import {
   Post,
   Request,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/users/auth/jwt-auth.guard';
-import { UpdateOrDeleteCarDTO } from './UpdateOrDeleteCar.dto';
 import { CarsService } from './cars.service';
-import { CreateCarDTO } from './CreateCar.dto';
-import { BaseCarDTO } from './BaseCar.dto';
+import { CarDTO, CarValidationGroups } from './car.dto';
+import { ValidationPipeWithGlobalOptions } from 'src/pipes/validation-with-global-options.pipe';
 
 @Controller('cars')
 export class CarsController {
@@ -19,22 +19,34 @@ export class CarsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createCar(@Body() car: CreateCarDTO, @Request() { user: { userID } }) {
+  @UsePipes(
+    new ValidationPipeWithGlobalOptions({
+      groups: [CarValidationGroups.CREATE],
+    }),
+  )
+  async createCar(@Body() car: CarDTO, @Request() { user: { userID } }) {
     return await this.carsService.create(car, userID);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch()
-  async updateCar(
-    @Body() car: UpdateOrDeleteCarDTO,
-    @Request() { user: { userID } },
-  ) {
+  @UsePipes(
+    new ValidationPipeWithGlobalOptions({
+      groups: [CarValidationGroups.UPDATE],
+    }),
+  )
+  async updateCar(@Body() car: CarDTO, @Request() { user: { userID } }) {
     return await this.carsService.update(car, userID);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async deleteCar(@Body() car: BaseCarDTO, @Request() { user: { userID } }) {
+  @UsePipes(
+    new ValidationPipeWithGlobalOptions({
+      groups: [CarValidationGroups.DELETE],
+    }),
+  )
+  async deleteCar(@Body() car: CarDTO, @Request() { user: { userID } }) {
     return await this.carsService.delete(car, userID);
   }
 }

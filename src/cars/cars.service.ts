@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { CarDTO } from './car.dto';
 import { Car } from './car.model';
-import { CreateCarDTO } from './CreateCar.dto';
-import { UpdateOrDeleteCarDTO } from './UpdateOrDeleteCar.dto';
 
 @Injectable()
 export class CarsService {
@@ -11,7 +10,7 @@ export class CarsService {
     private carModel: typeof Car,
   ) {}
 
-  async create(car: CreateCarDTO, userID: number): Promise<object | null> {
+  async create(car: CarDTO, userID: number): Promise<object | null> {
     const { title, stateID, type } = car;
 
     await this.carModel.create({
@@ -25,7 +24,7 @@ export class CarsService {
   }
 
   async update(
-    { title, stateID, type }: UpdateOrDeleteCarDTO,
+    { title, stateID, type }: CarDTO,
     userID: number,
   ): Promise<object | null> {
     const car = await this.findByStateID(stateID, userID);
@@ -44,10 +43,7 @@ export class CarsService {
     return { message: 'Car was updated successfully!' };
   }
 
-  async delete(
-    { stateID }: UpdateOrDeleteCarDTO,
-    userID: number,
-  ): Promise<object | null> {
+  async delete({ stateID }: CarDTO, userID: number): Promise<object | null> {
     const wasDeleted = await this.carModel.destroy({
       where: {
         stateID,
