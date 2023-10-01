@@ -4,9 +4,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthDataValidator } from './auth/auth.middleware';
-import { IsUsernameUniqueConstraint } from './decorators/IsUsernameUnique.decorator';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { LocalStrategy } from './auth/local.strategy';
+import { IsUniqueUsernameConstraint } from './decorators/IsUniqueUsername.decorator';
 import { User } from './user.model';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -24,7 +24,7 @@ import { UsersService } from './users.service';
   controllers: [UsersController],
   providers: [
     UsersService,
-    IsUsernameUniqueConstraint,
+    IsUniqueUsernameConstraint,
     LocalStrategy,
     JwtStrategy,
   ],

@@ -1,4 +1,5 @@
 import {
+  IsDefined,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -6,7 +7,7 @@ import {
   Matches,
 } from 'class-validator';
 import { Match } from './decorators/Match.decorator';
-import { IsUsernameUnique } from './decorators/IsUsernameUnique.decorator';
+import { IsUniqueUsername } from './decorators/IsUniqueUsername.decorator';
 import { UserInterface } from './User.interface';
 
 export enum UserValidationGroups {
@@ -16,15 +17,17 @@ export enum UserValidationGroups {
 }
 
 export class UserDTO implements UserInterface {
+  @IsDefined({ always: true })
   @IsString({ always: true })
   @IsNotEmpty({ always: true })
   @Length(4, 20, { groups: [UserValidationGroups.REGISTER] })
-  @IsUsernameUnique({
+  @IsUniqueUsername({
     message: 'Username $value already exists. Choose another name.',
     groups: [UserValidationGroups.REGISTER],
   })
   username: string;
 
+  @IsDefined({ always: true })
   @IsString({ always: true })
   @IsNotEmpty({ always: true })
   @Length(8, 20, {
@@ -36,6 +39,7 @@ export class UserDTO implements UserInterface {
   password: string;
 
   @IsOptional({ groups: [UserValidationGroups.AUTH] })
+  @IsDefined({ always: true })
   @IsString({ always: true })
   @IsNotEmpty({ always: true })
   @Length(8, 20, { always: true })

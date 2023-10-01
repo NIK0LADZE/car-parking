@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CarInterface } from './Car.interface';
 import { IsStateIDUnique } from './decorators/IsStateIDUnique.decorator';
 
@@ -10,6 +10,9 @@ export enum CarValidationGroups {
 
 export class CarDTO implements CarInterface {
   @IsOptional({ groups: [CarValidationGroups.UPDATE] })
+  @IsDefined({
+    groups: [CarValidationGroups.CREATE, CarValidationGroups.UPDATE],
+  })
   @IsString({
     groups: [CarValidationGroups.CREATE, CarValidationGroups.UPDATE],
   })
@@ -18,12 +21,16 @@ export class CarDTO implements CarInterface {
   })
   title: string;
 
+  @IsDefined({ always: true })
   @IsString({ always: true })
   @IsNotEmpty({ always: true })
   @IsStateIDUnique({ groups: [CarValidationGroups.CREATE] })
   stateID: string;
 
   @IsOptional({ groups: [CarValidationGroups.UPDATE] })
+  @IsDefined({
+    groups: [CarValidationGroups.CREATE, CarValidationGroups.UPDATE],
+  })
   @IsString({
     groups: [CarValidationGroups.CREATE, CarValidationGroups.UPDATE],
   })
