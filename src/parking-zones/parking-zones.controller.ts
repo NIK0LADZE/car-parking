@@ -2,11 +2,17 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { ValidationPipeWithGlobalOptions } from 'src/pipes/validation-with-global-options.pipe';
+import { JwtAuthGuard } from 'src/users/auth/jwt-auth.guard';
+import { Role } from 'src/users/roles/role.enum';
+import { Roles } from 'src/users/roles/roles.decorator';
+import { RolesGuard } from 'src/users/roles/roles.guard';
 import {
   ParkingZoneDTO,
   ParkingZoneValidationGroups,
@@ -18,6 +24,8 @@ export class ParkingZonesController {
   constructor(private readonly parkingZoneService: ParkingZonesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @UsePipes(
     new ValidationPipeWithGlobalOptions({
       groups: [ParkingZoneValidationGroups.CREATE],
@@ -27,12 +35,16 @@ export class ParkingZonesController {
     return await this.parkingZoneService.create(parkingZone);
   }
 
-  @Post('all')
+  @Get('all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   async getAllZones() {
     return await this.parkingZoneService.getAll();
   }
 
   @Patch()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @UsePipes(
     new ValidationPipeWithGlobalOptions({
       groups: [ParkingZoneValidationGroups.UPDATE],
@@ -43,6 +55,8 @@ export class ParkingZonesController {
   }
 
   @Delete()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @UsePipes(
     new ValidationPipeWithGlobalOptions({
       groups: [ParkingZoneValidationGroups.DELETE],

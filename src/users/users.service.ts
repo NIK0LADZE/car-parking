@@ -2,17 +2,20 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { bcryptPassword, comparePasswords } from '../utils/bcrypt';
+import { Role } from './roles/role.enum';
 import { UserDTO } from './user.dto';
 import { User } from './user.model';
 
 export interface FoundUser {
   userID: number;
   username: string;
+  role: Role;
 }
 
 export interface JwtPayload {
   username: string;
-  sub: string | number;
+  sub: number;
+  role: Role;
 }
 
 @Injectable()
@@ -50,18 +53,18 @@ export class UsersService {
     const user = await this.findByUsername(username);
 
     if (user) {
-      const { id: userID, username, password: hashedPassword } = user;
+      const { id: userID, username, password: hashedPassword, role } = user;
       const didMatch = comparePasswords(password, hashedPassword);
 
       if (didMatch) {
-        return { userID, username };
+        return { userID, username, role };
       }
     }
   }
 
   signIn(user: FoundUser) {
-    const { userID, username } = user;
-    const payload: JwtPayload = { username, sub: userID };
+    const { userID, username, role } = user;
+    const payload: JwtPayload = { username, sub: userID, role };
 
     return {
       username,
